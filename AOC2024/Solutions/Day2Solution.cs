@@ -2,40 +2,40 @@
 
 public class Day2Solution : ISolution
 {
+    private const int MAX_UNSAFE = 3;
+    private const int MIN_UNSAFE = 1;
+
     public string PartA(IEnumerable<string> data)
     {
-        var safe = data.Select(row => row.Split().Select(int.Parse).ToList()).Count(IsSafe);
-
-        return safe.ToString();
+        IEnumerable<List<int>> rows = data.Select(row => row.Split().Select(int.Parse).ToList());
+        return rows.Count(IsSafe).ToString();
     }
 
     public string PartB(IEnumerable<string> data)
     {
-        var safe = data.Select(row => row.Split().Select(int.Parse).ToList()).Count(IsDampenerSafe);
-
-        return safe.ToString();
+        IEnumerable<List<int>> rows = data.Select(row => row.Split().Select(int.Parse).ToList());
+        return rows.Count(IsDampenerSafe).ToString();
     }
 
     private static bool IsSafe(List<int> report)
     {
-        var ascending = report[1] - report[0] < 0;
-        for (var i = 1; i < report.Count; i++)
+        var reportIsAscending = report[1] - report[0] < 0;
+        for (var level = 1; level < report.Count; level++)
         {
-            var diff = report[i] - report[i - 1];
-            if (Math.Abs(diff) < 1 || Math.Abs(diff) > 3) return false;
-            if ((ascending && diff > 0) || (!ascending && diff < 0)) return false;
+            var diff = report[level] - report[level - 1];
+            var absDiff = Math.Abs(diff);
+            var levelIsAscending = diff < 0;
+
+            if (absDiff is < MIN_UNSAFE or > MAX_UNSAFE) return false;
+            if (reportIsAscending ^ levelIsAscending) return false;
         }
 
         return true;
     }
 
-
     private static bool IsDampenerSafe(List<int> report)
     {
-        if (IsSafe(report))
-        {
-            return true;
-        }
+        if (IsSafe(report)) return true;
 
         for (var level = 0; level < report.Count; level++)
         {
