@@ -2,18 +2,18 @@
 
 public class Day2Solution : ISolution
 {
-    private const int MAX_UNSAFE = 3;
-    private const int MIN_UNSAFE = 1;
+    private const int MaxUnsafe = 3;
+    private const int MinUnsafe = 1;
 
     public string PartA(IEnumerable<string> data)
     {
-        IEnumerable<List<int>> rows = data.Select(row => row.Split().Select(int.Parse).ToList());
+        var rows = data.Select(row => row.Split().Select(int.Parse).ToList());
         return rows.Count(IsSafe).ToString();
     }
 
     public string PartB(IEnumerable<string> data)
     {
-        IEnumerable<List<int>> rows = data.Select(row => row.Split().Select(int.Parse).ToList());
+        var rows = data.Select(row => row.Split().Select(int.Parse).ToList());
         return rows.Count(IsDampenerSafe).ToString();
     }
 
@@ -26,7 +26,7 @@ public class Day2Solution : ISolution
             var absDiff = Math.Abs(diff);
             var levelIsAscending = diff < 0;
 
-            if (absDiff is < MIN_UNSAFE or > MAX_UNSAFE) return false;
+            if (absDiff is < MinUnsafe or > MaxUnsafe) return false;
             if (reportIsAscending ^ levelIsAscending) return false;
         }
 
